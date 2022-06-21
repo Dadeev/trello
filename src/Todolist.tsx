@@ -4,11 +4,17 @@ type TodolistPropsType = {
     title?: string
     title2?: number
     tasks1: Array<inArrayType>
+    topCars: Array<topCarsType>
 }
 type inArrayType = {
     id: number,
     title: string,
     isDone: boolean
+}
+
+type topCarsType = {
+    manufacturer: string,
+    model: string
 }
 
 export const Todolist = (props: TodolistPropsType) => {
@@ -21,9 +27,9 @@ export const Todolist = (props: TodolistPropsType) => {
                 <button>+</button>
             </div>
             <ul>
-                {props.tasks1.map((el) => {
+                {props.topCars.map((el) => {
                     return (
-                        <li><input type="checkbox" checked={el.isDone}/> <span>{el.title}</span></li>
+                        <li><input type="checkbox" checked={true}/> <span>{el.manufacturer}</span></li>
                     )
                 })}
             </ul>
