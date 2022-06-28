@@ -15,7 +15,7 @@ type PropsType = {
 }
 
 export const Todolist = (props: PropsType) => {
-    const [filterValue, setFilterValue] = useState('All')
+    const [filterValue, setFilterValue] = useState<filterValueType>('All')
 
     const changeFilter = (value: filterValueType) => {
         setFilterValue(value)
