@@ -16,26 +16,26 @@ function App() {
         setTasks1(tasks1)
     }
 
-    // const [filterValue, setFilterValue] = useState('All')
-    //
-    // const changeFilter = (value: filterValueType) => {
-    //     setFilterValue(value)
-    // }
-    //
-    // let filteredTasks = tasks1;
-    // if (filterValue === 'Active') {
-    //     filteredTasks = tasks1.filter((el) => el.isDone === true)
-    // }
-    // if (filterValue === 'Completed') {
-    //     filteredTasks = tasks1.filter((el) => el.isDone === false)
-    // }
+    const [filterValue, setFilterValue] = useState('All')
+
+    const changeFilter = (value: filterValueType) => {
+        setFilterValue(value)
+    }
+
+    let filteredTasks = tasks1;
+    if (filterValue === 'Active') {
+        filteredTasks = tasks1.filter((el) => el.isDone === true)
+    }
+    if (filterValue === 'Completed') {
+        filteredTasks = tasks1.filter((el) => el.isDone === false)
+    }
     return (
         <div className="App">
             <Todolist
                 title={'What to learn'}
-                tasks1={tasks1}
+                tasks1={filteredTasks}
                 removeTask={removeTask}
-                // changeFilter={changeFilter}
+                changeFilter={changeFilter}
             />
         </div>
     );

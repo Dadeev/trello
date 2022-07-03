@@ -10,24 +10,13 @@ type TaskType = {
 type PropsType = {
     title?: string
     title2?: number
-    tasks1: Array<TaskType>
+    tasks1: TaskType[]
     removeTask: (taskId: number) => void
+    changeFilter: (value: filterValueType)=> void
+
 }
 
 export const Todolist = (props: PropsType) => {
-    const [filterValue, setFilterValue] = useState<filterValueType>('All')
-
-    const changeFilter = (value: filterValueType) => {
-        setFilterValue(value)
-    }
-
-    let filteredTasks = props.tasks1;
-    if (filterValue === 'Active') {
-        filteredTasks = props.tasks1.filter((el) => el.isDone === true)
-    }
-    if (filterValue === 'Completed') {
-        filteredTasks = props.tasks1.filter((el) => el.isDone === false)
-    }
     return (
         <div>
             <h3>{props.title}</h3>
@@ -36,7 +25,7 @@ export const Todolist = (props: PropsType) => {
                 <button>+</button>
             </div>
             <ul>
-                {filteredTasks.map((el, index) => {
+                {props.tasks1.map((el, index) => {
                     return (
                         <li key={el.id}>
                             <button onClick={() => props.removeTask(el.id)}>X</button>
@@ -48,9 +37,9 @@ export const Todolist = (props: PropsType) => {
                 })}
             </ul>
             <div>
-                <button onClick={() => changeFilter('All')}>All</button>
-                <button onClick={() => changeFilter('Active')}>Active</button>
-                <button onClick={() => changeFilter('Completed')}>Completed</button>
+                <button onClick={() => props.changeFilter('All')}>All</button>
+                <button onClick={() => props.changeFilter('Active')}>Active</button>
+                <button onClick={() => props.changeFilter('Completed')}>Completed</button>
             </div>
         </div>
     )
