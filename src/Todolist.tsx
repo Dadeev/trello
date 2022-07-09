@@ -23,31 +23,12 @@ type PropsType = {
 export const Todolist = (props: PropsType) => {
     const [newTitle, setNewTitle] = useState('')
 
-    // const AddTaskHandler = () => {
-    //     props.addTask(newTitle)
-    //     setNewTitle('')
-    // }
-    //
-    // const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    //     setNewTitle(e.currentTarget.value)
-    // }
-    //
-    // const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    //     if (e.key === 'Enter') {
-    //         AddTaskHandler()
-    //     }
-    // }
-
     const tsarChangeFilterHandler = (value: filterValueType) => {
         props.changeFilter(value)
     }
-
-
     const onClickHandler = (taskId: string) => {
         props.removeTask(taskId)
     }
-
-
     const addTaskHandler = () => {
         props.addTask(newTitle)
         setNewTitle('')
@@ -56,15 +37,10 @@ export const Todolist = (props: PropsType) => {
     return (
         <div>
             <h3>{props.title}</h3>
-            {/*<FullInput callBack={props.addTask}/>*/}
             <Input setNewTitle={setNewTitle} newTitle={newTitle} callBack={addTaskHandler}/>
             <Button name={'+'} callBack={addTaskHandler}/>
-            {/*<div>*/}
-            {/*    <input value={newTitle} onChange={onChangeHandler} onKeyUp={onKeyPressHandler}/>*/}
-            {/*    <Button name={'+'} callBack={AddTaskHandler}/>*/}
-            {/*</div>*/}
             <ul>
-                {props.tasks1.map(el => {
+                {props.tasks1.map((el) => {
                     return (
                         <li key={el.id}>
                             <Button name={'x'} callBack={() => onClickHandler(el.id)}/>

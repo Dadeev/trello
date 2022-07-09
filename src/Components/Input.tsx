@@ -16,8 +16,8 @@ export const Input: React.FC<InputType> = ({setNewTitle, newTitle,callBack}) => 
         }
     }
     return (
-        <div>
+        <>
             <input value={newTitle} onChange={onChangeHandler} onKeyUp={onKeyPressHandler}/>
-        </div>
+        </>
     );
 };

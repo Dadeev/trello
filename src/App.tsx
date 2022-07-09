@@ -30,10 +30,10 @@ function App() {
 
     let filteredTasks = tasks1;
     if (filterValue === 'Active') {
-        filteredTasks = tasks1.filter((el) => el.isDone === true)
+        filteredTasks = tasks1.filter((el) => el.isDone)
     }
     if (filterValue === 'Completed') {
-        filteredTasks = tasks1.filter((el) => el.isDone === false)
+        filteredTasks = tasks1.filter((el) => !el.isDone)
     }
     return (
         <div className="App">
@@ -49,4 +49,3 @@ function App() {
 }
 
 export default App;
-
