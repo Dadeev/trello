@@ -36,6 +36,7 @@ export const Todolist = (props: PropsType) => {
 
     return (
         <div>
+            {/*<FullInput/>*/}
             <h3>{props.title}</h3>
             <Input setNewTitle={setNewTitle} newTitle={newTitle} callBack={addTaskHandler}/>
             <Button name={'+'} callBack={addTaskHandler}/>
