@@ -4,6 +4,7 @@ import {Button} from "./Components/Button";
 import {FullInput} from "./Components/FullInput";
 import {Input} from "./Components/Input";
 import s from './Todolist.module.css'
+import {CheckBox} from "./Components/CheckBox";
 
 type TaskType = {
     id: string
@@ -42,7 +43,6 @@ export const Todolist = (props: PropsType) => {
     const changeCheckBoxHandler = (id: string, event: boolean) => {
         props.changeCheckBox(id, event)
     }
-
     return (
         <div>
             {/*<FullInput/>*/}
@@ -56,8 +56,9 @@ export const Todolist = (props: PropsType) => {
                     return (
                         <li key={el.id} className={el.isDone ? s.isDone : ''}>
                             <Button name={'x'} callBack={() => onClickHandler(el.id)}/>
-                            <input type="checkbox" checked={el.isDone}
-                                   onChange={(event) => changeCheckBoxHandler(el.id, event.currentTarget.checked)}/>
+                            <CheckBox checked={el.isDone} callBack={(event)=>changeCheckBoxHandler(el.id,event)}/>
+                            {/*<input type="checkbox" checked={el.isDone}*/}
+                            {/*       onChange={(event) => changeCheckBoxHandler(el.id, event.currentTarget.checked)}/>*/}
                             <span>{el.title}</span>
                         </li>
                     )
