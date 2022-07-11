@@ -1,8 +1,11 @@
 import React from 'react'
+import s from './../Todolist.module.css'
+
 
 type ButtonType = {
     name: string
     callBack: () => void
+    className?: string
 }
 
 export const Button = (props: ButtonType) => {
@@ -10,6 +13,6 @@ export const Button = (props: ButtonType) => {
         props.callBack()
     }
     return (
-        <button onClick={onClickHandler}>{props.name}</button>
+        <button className={props.className} onClick={onClickHandler}>{props.name}</button>
     )
 }

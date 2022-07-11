@@ -12,6 +12,11 @@ function App() {
         {id: v1(), title: 'TSX', isDone: true},
         {id: v1(), title: 'ReactJS', isDone: false}
     ])
+
+    const changeCheckBox = (id: string, value: boolean) => {
+        setTasks1(tasks1.map((el) => el.id === id ? {...el, isDone: value} : el))
+    }
+
     const addTask = (newTitle: string) => {
         const newTask = {id: v1(), title: newTitle, isDone: true}
         setTasks1([newTask, ...tasks1])
@@ -22,7 +27,7 @@ function App() {
         setTasks1(tasks1)
     }
 
-    const [filterValue, setFilterValue] = useState('All')
+    const [filterValue, setFilterValue] = useState<filterValueType>('All')
 
     const changeFilter = (value: filterValueType) => {
         setFilterValue(value)
@@ -43,6 +48,8 @@ function App() {
                 removeTask={removeTask}
                 changeFilter={changeFilter}
                 addTask={addTask}
+                changeCheckBox={changeCheckBox}
+                filterValue={filterValue}
             />
         </div>
     );
