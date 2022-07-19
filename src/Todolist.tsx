@@ -6,47 +6,51 @@ import {Input} from "./Components/Input";
 import s from './Todolist.module.css'
 import {CheckBox} from "./Components/CheckBox";
 
-type TaskType = {
+export type TaskType = {
     id: string
     title: string,
     isDone: boolean
 }
 
 type PropsType = {
+    id: string
     title?: string
-    title2?: number
     tasks1: TaskType[]
-    removeTask: (taskId: string) => void
-    changeFilter: (value: filterValueType) => void
-    addTask: (newTitle: string) => void
-    changeCheckBox: (id: string, value: boolean) => void
+    removeTask: (taskId: string, todolistID: string) => void
+    changeFilter: (value: filterValueType, todolistID: string) => void
+    addTask: (newTitle: string, todolistID: string) => void
+    changeCheckBox: (id: string, value: boolean, todolistID: string) => void
     filterValue: filterValueType
+    removeTodolist: (todolistID: string) => void
 }
 
 export const Todolist = (props: PropsType) => {
     const [newTitle, setNewTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
     const tsarChangeFilterHandler = (value: filterValueType) => {
-        props.changeFilter(value)
+        props.changeFilter(value, props.id)
     }
     const onClickHandler = (taskId: string) => {
-        props.removeTask(taskId)
+        props.removeTask(taskId, props.id)
     }
     const addTaskHandler = () => {
         if (newTitle.trim() !== '') {
-            props.addTask(newTitle.trim())
+            props.addTask(newTitle.trim(), props.id)
             setNewTitle('')
         } else {
             setError('Title is required')
         }
     }
     const changeCheckBoxHandler = (id: string, event: boolean) => {
-        props.changeCheckBox(id, event)
+        props.changeCheckBox(id, event, props.id)
     }
     return (
         <div>
             {/*<FullInput/>*/}
-            <h3>{props.title}</h3>
+            <h3>
+                {props.title}
+                <button onClick={() => props.removeTodolist(props.id)}></button>
+            </h3>
             <Input setNewTitle={setNewTitle} newTitle={newTitle} error={error} setError={setError}
                    callBack={addTaskHandler}/>
             <Button name={'+'} callBack={addTaskHandler}/>
@@ -56,7 +60,7 @@ export const Todolist = (props: PropsType) => {
                     return (
                         <li key={el.id} className={el.isDone ? s.isDone : ''}>
                             <Button name={'x'} callBack={() => onClickHandler(el.id)}/>
-                            <CheckBox checked={el.isDone} callBack={(event)=>changeCheckBoxHandler(el.id,event)}/>
+                            <CheckBox checked={el.isDone} callBack={(event) => changeCheckBoxHandler(el.id, event)}/>
                             {/*<input type="checkbox" checked={el.isDone}*/}
                             {/*       onChange={(event) => changeCheckBoxHandler(el.id, event.currentTarget.checked)}/>*/}
                             <span>{el.title}</span>
