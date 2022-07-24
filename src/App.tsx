@@ -31,15 +31,6 @@ function App() {
         ]
     })
 
-    // let [tasks, setTasks] = useState([
-    //     {id: v1(), title: "HTML&CSS", isDone: true},
-    //     {id: v1(), title: "JS", isDone: true},
-    //     {id: v1(), title: "ReactJS", isDone: false},
-    //     {id: v1(), title: "Rest API", isDone: false},
-    //     {id: v1(), title: "GraphQL", isDone: false},
-    // ]);
-    // let [filter, setFilter] = useState<FilterValuesType>("all");
-
     function removeTask(todolistID: string, taskId: string) {
         setTasks1({...tasks1, [todolistID]: tasks1[todolistID].filter(t => t.id !== taskId)})
     }
@@ -54,6 +45,11 @@ function App() {
 
     function changeFilter(todolistID: string, value: FilterValuesType) {
         setTodolist(todolist.map(t => t.id === todolistID ? {...t, filter: value} : t))
+    }
+
+    function RemoveTodolist(todolistID: string) {
+        setTodolist(todolist.filter(t => t.id !== todolistID))
+        delete tasks1[todolistID]
     }
 
     return (
@@ -79,6 +75,7 @@ function App() {
                         addTask={addTask}
                         changeTaskStatus={changeStatus}
                         filter={tl.filter}
+                        RemoveTodolist={RemoveTodolist}
                     />
                 )
             })}
