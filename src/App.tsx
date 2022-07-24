@@ -44,23 +44,16 @@ function App() {
         setTasks1({...tasks1, [todolistID]: tasks1[todolistID].filter(t => t.id !== taskId)})
     }
 
-    function addTask(title: string) {
-        // let task = {id: v1(), title: title, isDone: false};
-        // let newTasks = [task, ...tasks];
-        // setTasks(newTasks);
+    function addTask(todolistID: string, title: string) {
+        setTasks1({...tasks1, [todolistID]: [{id: v1(), title, isDone: true}, ...tasks1[todolistID]]})
     }
 
-    function changeStatus(taskId: string, isDone: boolean) {
-        // let task = tasks.find(t => t.id === taskId);
-        // if (task) {
-        //     task.isDone = isDone;
-        // }
-        //
-        // setTasks([...tasks]);
+    function changeStatus(todolistID: string, taskId: string, isDone: boolean) {
+        setTasks1({...tasks1, [todolistID]: tasks1[todolistID].map(t => t.id === taskId ? {...t, isDone} : t)})
     }
 
-    function changeFilter(value: FilterValuesType) {
-        // setFilter(value);
+    function changeFilter(todolistID: string, value: FilterValuesType) {
+        setTodolist(todolist.map(t => t.id === todolistID ? {...t, filter: value} : t))
     }
 
     return (
