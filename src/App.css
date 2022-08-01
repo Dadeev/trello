@@ -1,4 +1,8 @@
+body {
+    background-image: url(backgroundAnime.png);
+}
+
 .is-done {
-  text-decoration: line-through;
-  color: #555;
+    text-decoration: line-through;
+    color: #bdb4b4;
 }

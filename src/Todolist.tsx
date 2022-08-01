@@ -2,7 +2,7 @@ import React, {ChangeEvent} from 'react';
 import {FilterValuesType} from './App';
 import {AddItemForm} from './AddItemForm';
 import {EditableSpan} from './EditableSpan';
-import {Button, ButtonGroup, Checkbox, IconButton} from "@material-ui/core";
+import {Button, ButtonGroup, Checkbox, IconButton, List, ListItem} from "@material-ui/core";
 import {BackspaceOutlined, DeleteOutlined} from "@material-ui/icons";
 
 export type TaskType = {
@@ -48,7 +48,7 @@ export function Todolist(props: PropsType) {
             </IconButton>
         </h3>
         <AddItemForm addItem={addTask}/>
-        <ul>
+        <List>
             {
                 props.tasks.map(t => {
                     const onClickHandler = () => props.removeTask(t.id, props.id)
@@ -60,17 +60,16 @@ export function Todolist(props: PropsType) {
                         props.changeTaskTitle(t.id, newValue, props.id);
                     }
 
-
-                    return <li key={t.id} className={t.isDone ? "is-done" : ""}>
+                    return <ListItem disableGutters divider key={t.id} className={t.isDone ? "is-done" : ""}>
                         <Checkbox size={'small'} color={'primary'} onChange={onChangeHandler} checked={t.isDone}/>
                         <EditableSpan value={t.title} onChange={onTitleChangeHandler}/>
                         <IconButton size={'small'} onClick={onClickHandler}>
                             <DeleteOutlined fontSize={'small'}/>
                         </IconButton>
-                    </li>
+                    </ListItem>
                 })
             }
-        </ul>
+        </List>
         <div>
             <ButtonGroup disableElevation size={'small'} color={'primary'}
                          aria-label="small contained primary button group">
