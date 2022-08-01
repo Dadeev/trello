@@ -1,40 +1,46 @@
-import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {AddSharp} from "@material-ui/icons";
+import {IconButton} from "@material-ui/core";
 
-
-type AddItemFormType = {
+type AddItemFormPropsType = {
     addItem: (title: string) => void
 }
 
-export const AddItemForm: FC<AddItemFormType> = ({addItem}) => {
-    const [title, setTitle] = useState("")
-    const [error, setError] = useState<string | null>(null)
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.currentTarget.value)
-    }
-    const onKeyPressAddItem = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null);
-        if (e.key === 'Enter') {
-            onClickAddItem();
-        }
-    }
-    const onClickAddItem = () => {
-        let newTitle = title.trim();
-        if (newTitle !== "") {
-            addItem(newTitle);
+export function AddItemForm(props: AddItemFormPropsType) {
+
+    let [title, setTitle] = useState("")
+    let [error, setError] = useState<string | null>(null)
+
+    const addItem = () => {
+        if (title.trim() !== "") {
+            props.addItem(title);
             setTitle("");
         } else {
             setError("Title is required");
         }
     }
-    return (
-        <div>
-            <input value={title}
-                   onChange={onChangeHandler}
-                   onKeyDown={onKeyPressAddItem}
-                   className={error ? "error" : ""}
-            />
-            <button onClick={onClickAddItem}>+</button>
-            {error && <div className="error-message">{error}</div>}
-        </div>
-    );
-};
+
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.currentTarget.value)
+    }
+
+    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        setError(null);
+        if (e.charCode === 13) {
+            addItem();
+        }
+    }
+
+    return <div>
+        <input value={title}
+               onChange={onChangeHandler}
+               onKeyPress={onKeyPressHandler}
+               className={error ? "error" : ""}
+        />
+        <IconButton size={'small'} onClick={addItem}>
+            <AddSharp/>
+        </IconButton>
+
+        {error && <div className="error-message">{error}</div>}
+    </div>
+}
