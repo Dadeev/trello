@@ -56,6 +56,7 @@ function App() {
             setTasks({...tasks});
         }
     }
+
     function changeTaskTitle(id: string, newTitle: string, todolistId: string) {
         //достанем нужный массив по todolistId:
         let todolistTasks = tasks[todolistId];
@@ -77,6 +78,7 @@ function App() {
         // засетаем в стейт копию объекта, чтобы React отреагировал перерисовкой
         setTasks({...tasks});
     }
+
     function changeTodolistTitle(id: string, title: string) {
         // найдём нужный todolist
         const todolist = todolists.find(tl => tl.id === id);
@@ -118,7 +120,7 @@ function App() {
 
     return (
         <div className="App">
-            <AddItemForm addItem={addTodolist} />
+            <AddItemForm addItem={addTodolist}/>
             {
                 todolists.map(tl => {
                     let allTodolistTasks = tasks[tl.id];
