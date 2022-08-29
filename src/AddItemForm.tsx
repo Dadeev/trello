@@ -1,13 +1,12 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import {AddSharp} from "@material-ui/icons";
-import {IconButton, TextField} from "@material-ui/core";
+import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
+import {Box, Button, FormControl, IconButton, TextField} from '@material-ui/core';
+import {AddBox} from '@material-ui/icons';
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
 }
 
-export function AddItemForm(props: AddItemFormPropsType) {
-
+export const AddItemForm = memo((props: AddItemFormPropsType) => {
     let [title, setTitle] = useState("")
     let [error, setError] = useState<string | null>(null)
 
@@ -25,25 +24,25 @@ export function AddItemForm(props: AddItemFormPropsType) {
     }
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null);
-        if (e.key === 'Enter') {
+        if (error) {
+            setError(null)
+        }
+        if (e.charCode === 13) {
             addItem();
         }
     }
 
     return <div>
-        <TextField
-            variant={"outlined"}
-            size={'small'}
-            value={title}
-            label={'Title'}
-            onChange={onChangeHandler}
-            onKeyDown={onKeyPressHandler}
-            helperText={error && 'Title is required'}
-            error={!!error}
+        <TextField variant="outlined"
+                   error={!!error}
+                   value={title}
+                   onChange={onChangeHandler}
+                   onKeyPress={onKeyPressHandler}
+                   label="Title"
+                   helperText={error}
         />
-        <IconButton size={'small'} onClick={addItem}>
-            <AddSharp/>
+        <IconButton color="primary" onClick={addItem}>
+            <AddBox/>
         </IconButton>
     </div>
-}
+})
