@@ -1,21 +1,15 @@
 import React, {useEffect, useState} from 'react'
-import axios from "axios";
+import {TodoApi} from "../api/todo-api";
 
 export default {
     title: 'API'
 }
 
-const settings = {
-    withCredentials: true,
-    headers: {
-        'API-KEY': '01aa801c-2a8e-4bdc-82d2-9950462da9ea'
-    }
-}
 
 export const GetTodolists = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
-        axios.get('https://social-network.samuraijs.com/api/1.1/todo-lists', settings)
+        TodoApi.getTodos()
             .then((res) => {
                 setState(res.data)
             })
@@ -26,7 +20,7 @@ export const GetTodolists = () => {
 export const CreateTodolist = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
-        axios.post('https://social-network.samuraijs.com/api/1.1/todo-lists', {title: 'Yoy bro!'}, settings)
+        TodoApi.createTodo('create')
             .then((res) => {
                 setState(res.data.data.item)
             })
@@ -37,8 +31,8 @@ export const CreateTodolist = () => {
 export const DeleteTodolist = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
-        const todolistId = '93f4c062-fff0-4939-857a-0c2fcf7e8ea5';
-        axios.delete(`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}`, settings)
+        const todolistId = '83e405f1-2559-4582-a4a0-b489dd846139';
+        TodoApi.deleteTodolist(todolistId)
             .then((res) => {
                 setState(res.data)
             })
@@ -49,8 +43,8 @@ export const DeleteTodolist = () => {
 export const UpdateTodolistTitle = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
-        const todolistId = '18af9b30-d81e-4989-9dc5-bf29a783c261'
-        axios.put(`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}`, {title: 'OOOOOOOOO345'}, settings)
+        const todolistId = '8b9dbdde-efcf-423a-826c-4d73368fc9cf'
+        TodoApi.updateTodoTitle(todolistId, 'new updated title')
             .then((res) => {
                 setState(res.data)
             })
