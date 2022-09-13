@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {TodoApi} from "../api/todo-api";
 
 export default {
-    title: 'API'
+    title: 'API-Todos'
 }
 
 
