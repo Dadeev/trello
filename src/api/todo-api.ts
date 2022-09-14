@@ -45,10 +45,11 @@ export const TaskApi = {
     updateTask(todolistId: string, taskId: string, data: DataType) {
         return instance.put<CommonResponseType<{ item: updateTaskType }>>(`/todo-lists/${todolistId}/tasks/${taskId}`, data)
     },
-    deleteTaskType(todolistId: string, taskId: string) {
+    deleteTask(todolistId: string, taskId: string) {
         return instance.delete<CommonResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
     }
 }
+
 export type TasksType = {
     items: TaskType[];
     totalCount: number;
@@ -68,31 +69,34 @@ export type TaskType = {
 }
 
 export type CreateTaskType = {
-    id: string;
-    title: string;
-    todoListId: string;
-    order: number;
-    status: number;
-    priority: number;
-    addedDate: string;
+    description: string
+    title: string
+    completed: boolean
+    status: number
+    priority: number
+    startDate: string
+    deadline: string
+    id: string
+    todoListId: string
+    order: number
+    addedDate: string
 }
 export type DataType = {
-    title: string,
-    description: string,
-    completed: boolean,
-    status: number,
-    priority: number,
-    startDate: null | number,
-    deadline: null | number
+    title: string
+    description: string
+    completed: boolean
+    status: number
+    priority: number
+    startDate: string | null
+    deadline: string | null
 }
 
 export type updateTaskType = {
-    id: string;
-    title: string;
-    description: string;
-    todoListId: string;
-    order: number;
-    status: number;
-    priority: number;
-    addedDate: string;
+    title: string
+    description: string
+    completed: boolean
+    status: number
+    priority: number
+    startDate: string
+    deadline: string
 }
