@@ -50,6 +50,20 @@ export const TaskApi = {
     }
 }
 
+export enum TaskStatuses {
+    New = 0,
+    InProgress = 1,
+    Completed = 2,
+    Draft = 3
+}
+export enum TasksPriorities {
+    Low = 0,
+    Middle = 1,
+    Hi = 2,
+    Urgently = 3,
+    Later = 4
+}
+
 export type TasksType = {
     items: TaskType[];
     totalCount: number;
@@ -58,8 +72,8 @@ export type TaskType = {
     description: string
     title: string
     completed: boolean
-    status: number
-    priority: number
+    status: TaskStatuses
+    priority: TasksPriorities
     startDate: string
     deadline: string
     id: string
@@ -72,8 +86,8 @@ export type CreateTaskType = {
     description: string
     title: string
     completed: boolean
-    status: number
-    priority: number
+    status: TaskStatuses
+    priority: TasksPriorities
     startDate: string
     deadline: string
     id: string
@@ -85,8 +99,8 @@ export type DataType = {
     title: string
     description: string
     completed: boolean
-    status: number
-    priority: number
+    status: TaskStatuses
+    priority: TasksPriorities
     startDate: string | null
     deadline: string | null
 }
@@ -95,8 +109,8 @@ export type updateTaskType = {
     title: string
     description: string
     completed: boolean
-    status: number
-    priority: number
+    status: TaskStatuses
+    priority: TasksPriorities
     startDate: string
     deadline: string
 }
