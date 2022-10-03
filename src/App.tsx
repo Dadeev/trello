@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useLayoutEffect} from 'react'
+import React, {useCallback, useEffect} from 'react'
 import './App.css';
 import {Todolist} from './Todolist';
 import {AddItemForm} from './AddItemForm';
@@ -12,24 +12,16 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {Menu} from '@mui/icons-material';
 import {
-    addTodolistAC,
     changeTodolistFilterAC,
-    changeTodolistTitleAC, changeTodoTitleTC, createTodoTC, deleteTodoTC,
-    FilterValuesType, getTodos,
-    removeTodolistAC, setTodolistAC,
-    TodolistDomainType
+    changeTodoTitleTC,
+    createTodoTC,
+    deleteTodoTC,
+    FilterValuesType,
+    getTodos
 } from './state/todolists-reducer'
-import {
-    addTaskAC,
-    addTasksTC,
-    updateTaskStatusAC,
-    changeTaskTitleAC,
-    removeTaskAC,
-    removeTaskTC, updateTaskTC
-} from './state/tasks-reducer';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from './state/store';
-import {TaskStatuses, TaskType, todolistsAPI} from './api/todolists-api'
+import {addTasksTC, changeTaskTitleAC, removeTaskTC, updateTaskTC} from './state/tasks-reducer';
+import {TaskStatuses, TaskType} from './api/todolists-api'
+import {useAppDispatch, useAppSelector} from "./hooks/hooks";
 
 
 export type TasksStateType = {
@@ -39,9 +31,9 @@ export type TasksStateType = {
 
 function App() {
 
-    const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
-    const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
-    const dispatch = useDispatch();
+    const todolists = useAppSelector(state => state.todolists)
+    const tasks = useAppSelector(state => state.tasks)
+    const dispatch = useAppDispatch();
 
     const removeTask = useCallback(function (id: string, todolistId: string) {
         dispatch(removeTaskTC(id, todolistId))
