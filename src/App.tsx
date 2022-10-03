@@ -79,7 +79,7 @@ function App() {
     }, [dispatch]);
 
     useEffect(() => {
-        dispatch(getTodos)
+        dispatch(getTodos())
     }, [])
 
     return (
