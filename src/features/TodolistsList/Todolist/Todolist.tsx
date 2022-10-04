@@ -1,14 +1,15 @@
-import React, {useCallback, useEffect} from 'react'
-import {AddItemForm} from './AddItemForm'
-import {EditableSpan} from './EditableSpan'
+import React, { useCallback, useEffect } from 'react'
+import { AddItemForm } from '../../../components/AddItemForm/AddItemForm'
+import { EditableSpan } from '../../../components/EditableSpan/EditableSpan'
+import { Task } from './Task/Task'
+import { TaskStatuses, TaskType } from '../../../api/todolists-api'
+import { FilterValuesType } from '../todolists-reducer'
+import { useDispatch } from 'react-redux'
+import { fetchTasksTC } from '../tasks-reducer'
+
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
-import {Delete} from '@mui/icons-material';
-import {Task} from './Task'
-import {TaskStatuses, TaskType} from './api/todolists-api'
-import {FilterValuesType} from './state/todolists-reducer'
-import {setTasksTC} from "./state/tasks-reducer";
-import {useAppDispatch} from "./hooks/hooks";
+import { Delete } from '@mui/icons-material';
 
 type PropsType = {
     id: string
@@ -28,7 +29,11 @@ type PropsType = {
 export const Todolist = React.memo(function (props: PropsType) {
     console.log('Todolist called')
 
-    const dispatch = useAppDispatch()
+    const dispatch = useDispatch()
+    useEffect(() => {
+        const thunk = fetchTasksTC(props.id)
+        dispatch(thunk)
+    }, [])
 
     const addTask = useCallback((title: string) => {
         props.addTask(title, props.id)
@@ -54,9 +59,6 @@ export const Todolist = React.memo(function (props: PropsType) {
     if (props.filter === 'completed') {
         tasksForTodolist = props.tasks.filter(t => t.status === TaskStatuses.Completed)
     }
-    useEffect(() => {
-        dispatch(setTasksTC(props.id))
-    }, [])
 
     return <div>
         <h3><EditableSpan value={props.title} onChange={changeTodolistTitle}/>
