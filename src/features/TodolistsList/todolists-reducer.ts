@@ -80,8 +80,12 @@ export const addTodolistTC = (title: string) => {
         dispatch(setAppStatusAC('loading'))
         todolistsAPI.createTodolist(title)
             .then((res) => {
-                dispatch(addTodolistAC(res.data.data.item))
-                dispatch(setAppStatusAC('succeeded'))
+                if (res.data.resultCode === RESULT_CODES.succeeded) {
+                    dispatch(addTodolistAC(res.data.data.item))
+                    dispatch(setAppStatusAC('succeeded'))
+                } else {
+                    handleServerAppError(res.data, dispatch)
+                }
             }).catch((e) => {
             const error = e.response ? e.response.data.error : e.message
             handleServerNetworkError(error, dispatch)
@@ -92,7 +96,11 @@ export const changeTodolistTitleTC = (id: string, title: string) => {
     return (dispatch: Dispatch<ActionsType>) => {
         todolistsAPI.updateTodolist(id, title)
             .then((res) => {
-                dispatch(changeTodolistTitleAC(id, title))
+                if (res.data.resultCode === RESULT_CODES.succeeded) {
+                    dispatch(changeTodolistTitleAC(id, title))
+                } else {
+                    handleServerAppError(res.data, dispatch)
+                }
             }).catch((e) => {
             const error = e.response ? e.response.data.error : e.message
             handleServerNetworkError(error, dispatch)
