@@ -10,6 +10,8 @@ import {
 import {Dispatch} from 'redux'
 import {AppRootStateType} from '../../app/store'
 import {AppActionsType, setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
+import axios, {AxiosError} from "axios";
 
 const initialState: TasksStateType = {}
 
@@ -86,15 +88,14 @@ export const addTaskTC = (title: string, todolistId: string) => (dispatch: Dispa
                 const action = addTaskAC(task)
                 dispatch(action)
             } else {
-                if (res.data.messages.length) {
-                    dispatch(setAppErrorAC(res.data.messages[0]))
-                } else {
-                    dispatch(setAppErrorAC('Some error'))
-                }
-                dispatch(setAppStatusAC('failed'))
+                handleServerAppError<{ item: TaskType }>(res.data, dispatch)
             }
             dispatch(setAppStatusAC('succeeded'))
-        })
+        }).catch((e: AxiosError<{ error: string }>) => {
+        const error = e.response ? e.response.data.error : e.message
+        //dispatch(setAppErrorAC(error))
+        handleServerNetworkError(error, dispatch)
+    })
 }
 export const updateTaskTC = (taskId: string, domainModel: UpdateDomainTaskModelType, todolistId: string) =>
     (dispatch: Dispatch<ActionsType>, getState: () => AppRootStateType) => {
@@ -119,10 +120,22 @@ export const updateTaskTC = (taskId: string, domainModel: UpdateDomainTaskModelT
 
         todolistsAPI.updateTask(todolistId, taskId, apiModel)
             .then(res => {
-                const action = updateTaskAC(taskId, domainModel, todolistId)
-                dispatch(action)
-                dispatch(setAppStatusAC('succeeded'))
-            })
+                if (res.data.resultCode === RESULT_CODES.succeeded) {
+                    const action = updateTaskAC(taskId, domainModel, todolistId)
+                    dispatch(action)
+                    dispatch(setAppStatusAC('succeeded'))
+                } else {
+                    handleServerAppError(res.data, dispatch)
+                }
+            }).catch((e) => {
+            const err = e as Error | AxiosError
+            if (axios.isAxiosError(err)) {
+                const error = err.response?.data // object is possibly undefined
+                    ? (err.response.data as { error: string }).error
+                    : err.message
+                handleServerNetworkError(error, dispatch)
+            }
+        })
     }
 
 // types

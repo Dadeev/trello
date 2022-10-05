@@ -1,6 +1,7 @@
-import {todolistsAPI, TodolistType} from '../../api/todolists-api'
+import {RESULT_CODES, todolistsAPI, TodolistType} from '../../api/todolists-api'
 import {Dispatch} from 'redux'
 import {AppActionsType, RequestStatusType, setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
+import {handleServerAppError} from "../../utils/error-utils";
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -58,16 +59,11 @@ export const removeTodolistTC = (todolistId: string) => {
         dispatch(changeTodolistStatusAC('loading', todolistId))
         todolistsAPI.deleteTodolist(todolistId)
             .then((res) => {
-                if (res.data.resultCode === 0) {
+                if (res.data.resultCode === RESULT_CODES.succeeded) {
                     dispatch(removeTodolistAC(todolistId))
                     dispatch(setAppStatusAC('succeeded'))
                 } else {
-                    if (res.data.messages.length) {
-                        dispatch(setAppErrorAC(res.data.messages[0]))
-                    } else {
-                        dispatch(setAppErrorAC('some error'))
-                    }
-                    dispatch(setAppStatusAC('failed'))
+                    handleServerAppError(res.data, dispatch)
                 }
             }).catch((e) => {
             dispatch(changeTodolistStatusAC('failed', todolistId))
