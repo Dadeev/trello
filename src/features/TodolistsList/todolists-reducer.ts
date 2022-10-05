@@ -1,7 +1,7 @@
 import {RESULT_CODES, todolistsAPI, TodolistType} from '../../api/todolists-api'
 import {Dispatch} from 'redux'
 import {AppActionsType, RequestStatusType, setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
-import {handleServerAppError} from "../../utils/error-utils";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -50,7 +50,10 @@ export const fetchTodolistsTC = () => {
             .then((res) => {
                 dispatch(setTodolistsAC(res.data))
                 dispatch(setAppStatusAC('succeeded'))
-            })
+            }).catch((e) => {
+            const error = e.response ? e.response.data.error : e.message
+            handleServerNetworkError(error, dispatch)
+        })
     }
 }
 export const removeTodolistTC = (todolistId: string) => {
@@ -79,7 +82,10 @@ export const addTodolistTC = (title: string) => {
             .then((res) => {
                 dispatch(addTodolistAC(res.data.data.item))
                 dispatch(setAppStatusAC('succeeded'))
-            })
+            }).catch((e) => {
+            const error = e.response ? e.response.data.error : e.message
+            handleServerNetworkError(error, dispatch)
+        })
     }
 }
 export const changeTodolistTitleTC = (id: string, title: string) => {
@@ -87,7 +93,10 @@ export const changeTodolistTitleTC = (id: string, title: string) => {
         todolistsAPI.updateTodolist(id, title)
             .then((res) => {
                 dispatch(changeTodolistTitleAC(id, title))
-            })
+            }).catch((e) => {
+            const error = e.response ? e.response.data.error : e.message
+            handleServerNetworkError(error, dispatch)
+        })
     }
 }
 

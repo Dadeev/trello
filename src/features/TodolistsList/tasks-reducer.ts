@@ -9,7 +9,7 @@ import {
 } from '../../api/todolists-api'
 import {Dispatch} from 'redux'
 import {AppRootStateType} from '../../app/store'
-import {AppActionsType, setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
+import {AppActionsType, RequestStatusType, setAppStatusAC} from "../../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import axios, {AxiosError} from "axios";
 
@@ -42,6 +42,12 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
         }
         case 'SET-TASKS':
             return {...state, [action.todolistId]: action.tasks}
+        case "TASK/CHANGE-TASK-ENTITY-STATUS":
+            return {
+                ...state,
+                [action.todolistId]: state[action.todolistId]
+                    .map(t => t.id === action.taskId ? {...t, entityStatus: action.status} : t)
+            }
         default:
             return state
     }
@@ -56,6 +62,9 @@ export const updateTaskAC = (taskId: string, model: UpdateDomainTaskModelType, t
     ({type: 'UPDATE-TASK', model, todolistId, taskId} as const)
 export const setTasksAC = (tasks: Array<TaskType>, todolistId: string) =>
     ({type: 'SET-TASKS', tasks, todolistId} as const)
+export const changeTaskStatusAC = (status: RequestStatusType, taskId: string, todolistId: string) =>
+    ({type: 'TASK/CHANGE-TASK-ENTITY-STATUS', status, taskId, todolistId} as const)
+
 
 // thunks
 export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
@@ -66,17 +75,24 @@ export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsT
             const action = setTasksAC(tasks, todolistId)
             dispatch(action)
             dispatch(setAppStatusAC('succeeded'))
-        })
+        }).catch((e) => {
+        const error = e.response ? e.response.data.error : e.message
+        handleServerNetworkError(error, dispatch)
+    })
 }
 
 export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
     dispatch(setAppStatusAC('loading'))
+    dispatch(changeTaskStatusAC('loading', taskId, todolistId))
     todolistsAPI.deleteTask(todolistId, taskId)
         .then(res => {
             const action = removeTaskAC(taskId, todolistId)
             dispatch(action)
             dispatch(setAppStatusAC('succeeded'))
-        })
+        }).catch((e) => {
+        const error = e.response ? e.response.data.error : e.message
+        handleServerNetworkError(error, dispatch)
+    })
 }
 
 export const addTaskTC = (title: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
@@ -93,13 +109,13 @@ export const addTaskTC = (title: string, todolistId: string) => (dispatch: Dispa
             dispatch(setAppStatusAC('succeeded'))
         }).catch((e: AxiosError<{ error: string }>) => {
         const error = e.response ? e.response.data.error : e.message
-        //dispatch(setAppErrorAC(error))
         handleServerNetworkError(error, dispatch)
     })
 }
 export const updateTaskTC = (taskId: string, domainModel: UpdateDomainTaskModelType, todolistId: string) =>
     (dispatch: Dispatch<ActionsType>, getState: () => AppRootStateType) => {
         dispatch(setAppStatusAC('loading'))
+        dispatch(changeTaskStatusAC('loading', taskId, todolistId))
         const state = getState()
         const task = state.tasks[todolistId].find(t => t.id === taskId)
         if (!task) {
@@ -124,6 +140,7 @@ export const updateTaskTC = (taskId: string, domainModel: UpdateDomainTaskModelT
                     const action = updateTaskAC(taskId, domainModel, todolistId)
                     dispatch(action)
                     dispatch(setAppStatusAC('succeeded'))
+                    dispatch(changeTaskStatusAC('succeeded', taskId, todolistId))
                 } else {
                     handleServerAppError(res.data, dispatch)
                 }
@@ -159,3 +176,4 @@ type ActionsType =
     | SetTodolistsActionType
     | ReturnType<typeof setTasksAC>
     | AppActionsType
+    | ReturnType<typeof changeTaskStatusAC>
