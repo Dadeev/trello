@@ -36,6 +36,7 @@ export const Login = () => {
         },
         onSubmit: values => {
             alert(JSON.stringify(values, null, 2));
+            formik.resetForm()
         }
     })
 
@@ -55,17 +56,17 @@ export const Login = () => {
                         <p>Password: free</p>
                     </FormLabel>
                     <FormGroup>
-                        <TextField label="Email"
-                                   margin="normal"
-                                   {...formik.getFieldProps('email')}/>
-                        {formik.errors.email && <div style={{color: 'red'}}>{formik.errors.email}</div>}
-                        <TextField type="password"
-                                   label="Password"
-                                   margin="normal"
-                                   {...formik.getFieldProps('password')}/>
-                        {formik.errors.password && <div style={{color: 'red'}}>{formik.errors.password}</div>}
-                        <FormControlLabel label={'Remember me'}
-                                          control={<Checkbox/>}
+                        <TextField label="Email" margin="normal"
+                                   {...formik.getFieldProps('email')}
+                        />
+                        {formik.touched.email && formik.errors.email &&
+                            <div style={{color: 'red'}}>{formik.errors.email}</div>}
+                        <TextField type="password" label="Password" margin="normal"
+                                   {...formik.getFieldProps('password')}
+                        />
+                        {formik.touched.password && formik.errors.password &&
+                            <div style={{color: 'red'}}>{formik.errors.password}</div>}
+                        <FormControlLabel label={'Remember me'} control={<Checkbox checked={formik.values.rememberMe}/>}
                                           {...formik.getFieldProps('rememberMe')}/>
                         <Button type={'submit'} variant={'contained'} color={'primary'}>
                             Login
