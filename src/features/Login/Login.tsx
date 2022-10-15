@@ -8,6 +8,9 @@ import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {useFormik} from "formik";
+import {authAPI} from "../../api/todolists-api";
+import {useDispatch} from "react-redux";
+import {loginTC} from "./auth-reducer";
 
 type FormikErrorType = {
     email?: string
@@ -15,6 +18,7 @@ type FormikErrorType = {
     rememberMe?: boolean
 }
 export const Login = () => {
+    const dispatch = useDispatch();
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -35,7 +39,7 @@ export const Login = () => {
             return errors;
         },
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+            dispatch(loginTC(values))
             formik.resetForm()
         }
     })
