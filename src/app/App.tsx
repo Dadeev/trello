@@ -1,9 +1,9 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import './App.css'
 import {TodolistsList} from '../features/TodolistsList/TodolistsList'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {AppRootStateType, useAppSelector} from './store'
-import {RequestStatusType} from './app-reducer'
+import {initializeAppTC, RequestStatusType} from './app-reducer'
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -22,6 +22,10 @@ type PropsType = {
 
 function App({demo = false}: PropsType) {
     const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(initializeAppTC())
+    }, [])
     return (
         <div className="App">
             <ErrorSnackbar/>
