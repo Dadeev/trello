@@ -2,7 +2,7 @@ import React from 'react'
 import './App.css'
 import {TodolistsList} from '../features/TodolistsList/TodolistsList'
 import {useSelector} from 'react-redux'
-import {AppRootStateType} from './store'
+import {AppRootStateType, useAppSelector} from './store'
 import {RequestStatusType} from './app-reducer'
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
