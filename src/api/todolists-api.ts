@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios'
+import axios, {AxiosResponse} from 'axios'
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -10,15 +10,18 @@ const instance = axios.create({
 
 export const authAPI = {
     login(data: LoginParamsType) {
-        return instance.post<LoginParamsType, AxiosResponse<ResponseType<{item: string}>>>('auth/login', data)
+        return instance.post<LoginParamsType, AxiosResponse<ResponseType<{ item: string }>>>('auth/login', data)
+    },
+    logout() {
+        return instance.delete<ResponseType>('auth/login')
     },
     me() {
         return instance.get<ResponseType<getObjData>>('auth/me')
     }
 }
 export type getObjData = {
-	id: number;
-	login: string;
+    id: number;
+    login: string;
     email: string;
 }
 

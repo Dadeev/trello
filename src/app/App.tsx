@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react'
 import './App.css'
 import {TodolistsList} from '../features/TodolistsList/TodolistsList'
-import {useDispatch, useSelector} from 'react-redux'
-import {AppRootStateType, useAppSelector} from './store'
-import {initializeAppTC, RequestStatusType} from './app-reducer'
+import {useDispatch} from 'react-redux'
+import {useAppSelector} from './store'
+import {initializeAppTC} from './app-reducer'
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -16,6 +16,7 @@ import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar'
 import {Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "../features/Login/Login";
 import CircularProgress from "@mui/material/CircularProgress";
+import {logoutTC} from "../features/Login/auth-reducer";
 
 type PropsType = {
     demo?: boolean
@@ -24,6 +25,7 @@ type PropsType = {
 function App({demo = false}: PropsType) {
     const status = useAppSelector((state) => state.app.status)
     const isInitialized = useAppSelector((state) => state.app.isInitialized)
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(initializeAppTC())
@@ -36,6 +38,9 @@ function App({demo = false}: PropsType) {
         </div>
     }
 
+    const logoutHandler = () => {
+        dispatch(logoutTC())
+    }
 
     return (
         <div className="App">
@@ -48,7 +53,7 @@ function App({demo = false}: PropsType) {
                     <Typography variant="h6">
                         News
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    {isLoggedIn && <Button onClick={logoutHandler} color="inherit">Logout</Button>}
                 </Toolbar>
                 {status === 'loading' && <LinearProgress/>}
             </AppBar>
