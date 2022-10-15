@@ -2,7 +2,7 @@ import {Dispatch} from 'redux'
 import {SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from '../../app/app-reducer'
 import {authAPI, LoginParamsType} from "../../api/todolists-api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
-import axios, {Axios} from "axios";
+import axios from "axios";
 
 const initialState = {
     isLoggedIn: false
